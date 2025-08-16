@@ -32,42 +32,42 @@
       animation: bounce 1s infinite;
     }
 
-    h1 span:nth-child(odd) {
-      color: #ffeb3b;
-    }
+    h1 span:nth-child(odd) { color: #ffeb3b; }
+    h1 span:nth-child(even) { color: #ff4081; }
 
-    h1 span:nth-child(even) {
-      color: #ff4081;
-    }
-
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
+    @keyframes fadeIn { to { opacity: 1; } }
 
     @keyframes bounce {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
     }
 
-    /* Floating hearts */
-    .heart {
+    /* Floating hearts & chocolates */
+    .heart, .choco {
       position: absolute;
       bottom: -20px;
-      color: #ff4081;
       font-size: 20px;
       animation: floatUp 5s linear infinite;
-      opacity: 0.8;
+      opacity: 0.9;
     }
 
     @keyframes floatUp {
-      0% {
-        transform: translateY(0) scale(1);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(-120vh) scale(1.5);
-        opacity: 0;
-      }
+      0% { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-120vh) scale(1.5); opacity: 0; }
+    }
+
+    /* Falling flowers */
+    .flower {
+      position: absolute;
+      top: -40px;
+      font-size: 24px;
+      animation: fall linear forwards;
+      opacity: 0.9;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(110vh) rotate(360deg); }
     }
 
     /* Image Styling */
@@ -81,6 +81,13 @@
       animation: pulse 2s infinite;
       margin-bottom: 15px;
       z-index: 2;
+      transition: all 0.5s ease-in-out;
+    }
+
+    .love-image:hover {
+      content: url("picture1.jpg"); /* change image on hover */
+      transform: scale(1.15) rotate(5deg);
+      box-shadow: 0 0 30px rgba(255, 64, 129, 0.8);
     }
 
     @keyframes pulse {
@@ -90,14 +97,46 @@
 
     /* Video Styling */
     .love-video {
-      width: 320px;
-      height: 180px;
-      border-radius: 20px;
+      width: 350px;
+      height: 230px;
+      border-radius: 5px;
       margin-top: 20px;
-      border: 4px solid white;
-      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      border: 2px solid white;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.797);
       animation: fadeIn 3s ease-in-out;
       z-index: 2;
+    }
+
+    /* Button Styling */
+    .love-button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 30px;
+      background: #ff4081;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      transition: all 0.3s;
+      z-index: 3;
+    }
+
+    .love-button:hover {
+      background: #ffeb3b;
+      color: #333;
+      transform: scale(1.1);
+    }
+
+    #sweet-message {
+      display: none;
+      font-size: 1.6rem;
+      color: white;
+      text-align: center;
+      margin-top: 15px;
+      max-width: 80%;
+      text-shadow: 1px 1px 8px rgba(0,0,0,0.5);
+      animation: fadeIn 2s forwards;
     }
   </style>
 </head>
@@ -105,18 +144,28 @@
   <!-- Replace with your own photo -->
   <img src="picture.jpg" alt="Love Image" class="love-image">
 
-  <h1>
+  <h1 id="hide">
     <span>H</span><span>a</span><span>p</span><span>p</span><span>y</span>
     <span>1</span><span>s</span><span>t</span>
     <span>A</span><span>n</span><span>n</span><span>i</span><span>v</span><span>e</span><span>r</span><span>s</span><span>a</span><span>r</span><span>y</span>
     <br>
     <span>a</span><span>n</span><span>d</span>
-    <span>1</span><span> </span><span>M</span><span>o</span><span>n</span><span>t</span><span>h</span>
+    <span>1</span><span>&nbsp;</span><span>M</span><span>o</span><span>n</span><span>t</span><span>h</span>
     <br>
     <span>L</span><span>o</span><span>v</span><span>e</span>,
     <span>M</span><span>y</span>
     <span>W</span><span>i</span><span>f</span><span>e</span>
   </h1>
+
+  <!-- Button -->
+  <button class="love-button" onclick="showSweetMessage()">💌 Click for Surprise 💌</button>
+
+  <!-- Sweet Message -->
+  <div id="sweet-message">
+    My love, every moment with you feels like magic. 💖  
+    Thank you for being my everything — my life, my happiness, my forever.  
+    Cheers to our journey together, and to countless anniversaries ahead. 🥂💍  
+  </div>
 
   <!-- Replace with your own video -->
   <video class="love-video" controls autoplay loop muted>
@@ -134,11 +183,42 @@
       heart.style.fontSize = Math.random() * 20 + 15 + "px";
       heart.style.animationDuration = Math.random() * 3 + 3 + "s";
       document.body.appendChild(heart);
-
       setTimeout(() => heart.remove(), 6000);
     }
-
     setInterval(createHeart, 500);
+
+    // Floating chocolates
+    function createChoco() {
+      const choco = document.createElement("div");
+      choco.className = "choco";
+      choco.innerHTML = "🍫";
+      choco.style.left = Math.random() * 100 + "vw";
+      choco.style.fontSize = Math.random() * 20 + 15 + "px";
+      choco.style.animationDuration = Math.random() * 3 + 4 + "s";
+      document.body.appendChild(choco);
+      setTimeout(() => choco.remove(), 6000);
+    }
+    setInterval(createChoco, 800);
+
+    // Falling flowers
+    function createFlower() {
+      const flower = document.createElement("div");
+      flower.className = "flower";
+      const flowers = ["🌸","🌹","🌼","💐"];
+      flower.innerHTML = flowers[Math.floor(Math.random() * flowers.length)];
+      flower.style.left = Math.random() * 100 + "vw";
+      flower.style.fontSize = Math.random() * 20 + 15 + "px";
+      flower.style.animationDuration = Math.random() * 5 + 5 + "s";
+      document.body.appendChild(flower);
+      setTimeout(() => flower.remove(), 10000);
+    }
+    setInterval(createFlower, 700);
+
+    // Button function
+    function showSweetMessage() {
+      document.getElementById("hide").style.display = "none";
+      document.getElementById("sweet-message").style.display = "block";
+    }
   </script>
 </body>
 </html>
